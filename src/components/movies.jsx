@@ -6,11 +6,18 @@ import { getMovies } from "../services/fakeMovieService";
 class Movies extends Component {
   state = {
     movies: getMovies(),
+    moviesPage: getMovies().slice(0, 4),
+  };
+
+  handlePagination = (page) => {
+    let index = page * 4 - 4;
+    const moviesPage = this.state.movies.slice(index, index + 4);
+    this.setState({ moviesPage });
   };
 
   handleClick = (movie) => {
-    const movies = [...this.state.movies];
-    const index = this.state.movies.indexOf(movie);
+    const movies = [...this.state.moviesPage];
+    const index = this.state.moviesPage.indexOf(movie);
     movies[index] = { ...movie };
     movies[index].liked = !movies[index].liked;
     this.setState({ movies });
@@ -18,7 +25,7 @@ class Movies extends Component {
 
   handleDelete = (movie) => {
     this.setState(
-      this.state.movies.splice(this.state.movies.indexOf(movie), 1)
+      this.state.moviesPage.splice(this.state.moviesPage.indexOf(movie), 1)
     );
   };
 
@@ -40,7 +47,7 @@ class Movies extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.movies.map((movie) => (
+            {this.state.moviesPage.map((movie) => (
               <tr key={movie._id}>
                 <td>{movie.title}</td>
                 <td>{movie.genre.name}</td>
@@ -64,7 +71,10 @@ class Movies extends Component {
             ))}
           </tbody>
         </table>
-        <Pagination movies={this.state.movies} />
+        <Pagination
+          movies={this.state.movies}
+          onPagination={(page) => this.handlePagination(page)}
+        />
       </React.Fragment>
     );
   }

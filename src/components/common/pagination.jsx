@@ -4,18 +4,22 @@ class Pagination extends Component {
   state = { paginations: [] };
 
   renderPagination = () => {
-    const pags = Math.ceil(this.props.movies.length / 4);
+    const pages = Math.ceil(this.props.movies.length / 4);
 
-    for (let index = 0; index < pags; index++) {
+    for (let index = 0; index < pages; index++) {
       this.state.paginations[index] = index + 1;
     }
 
     return (
-      <ul class="pagination">
-        {this.state.paginations.map((pag) => (
-          <li class="page-item">
-            <a class="page-link" href="#">
-              {pag}
+      <ul className="pagination">
+        {this.state.paginations.map((page) => (
+          <li
+            className="page-item"
+            key={page}
+            onClick={() => this.props.onPagination(page)}
+          >
+            <a className="page-link" href="#">
+              {page}
             </a>
           </li>
         ))}
