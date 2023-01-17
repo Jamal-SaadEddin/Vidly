@@ -6,18 +6,12 @@ import { getMovies } from "../services/fakeMovieService";
 class Movies extends Component {
   state = {
     movies: getMovies(),
-    moviesPage: getMovies().slice(0, 4),
-  };
-
-  handlePagination = (page) => {
-    let index = page * 4 - 4;
-    const moviesPage = this.state.movies.slice(index, index + 4);
-    this.setState({ moviesPage });
+    pageSize: 4,
   };
 
   handleClick = (movie) => {
-    const movies = [...this.state.moviesPage];
-    const index = this.state.moviesPage.indexOf(movie);
+    const movies = [...this.state.movies];
+    const index = this.state.movies.indexOf(movie);
     movies[index] = { ...movie };
     movies[index].liked = !movies[index].liked;
     this.setState({ movies });
@@ -25,8 +19,12 @@ class Movies extends Component {
 
   handleDelete = (movie) => {
     this.setState(
-      this.state.moviesPage.splice(this.state.moviesPage.indexOf(movie), 1)
+      this.state.movies.splice(this.state.movies.indexOf(movie), 1)
     );
+  };
+
+  handlePageChange = (page) => {
+    console.log(page);
   };
 
   renderTable() {
@@ -47,7 +45,7 @@ class Movies extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.moviesPage.map((movie) => (
+            {this.state.movies.map((movie) => (
               <tr key={movie._id}>
                 <td>{movie.title}</td>
                 <td>{movie.genre.name}</td>
@@ -72,8 +70,9 @@ class Movies extends Component {
           </tbody>
         </table>
         <Pagination
-          movies={this.state.movies}
-          onPagination={(page) => this.handlePagination(page)}
+          itemCount={count}
+          pageSize={this.state.pageSize}
+          onPageChange={this.handlePageChange}
         />
       </React.Fragment>
     );
