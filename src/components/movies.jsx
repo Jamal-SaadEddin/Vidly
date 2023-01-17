@@ -6,7 +6,7 @@ import { getMovies } from "../services/fakeMovieService";
 class Movies extends Component {
   state = {
     movies: getMovies(),
-    pageSize: 4,
+    pageSize: 10,
   };
 
   handleClick = (movie) => {
@@ -70,7 +70,7 @@ class Movies extends Component {
           </tbody>
         </table>
         <Pagination
-          itemCount={count}
+          itemsCount={count}
           pageSize={this.state.pageSize}
           onPageChange={this.handlePageChange}
         />
