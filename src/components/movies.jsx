@@ -9,9 +9,10 @@ import { paginate } from "../utils/paginate";
 class Movies extends Component {
   state = {
     movies: getMovies(),
-    genres: getGenres(),
     pageSize: 4,
     currentPage: 1,
+    genres: getGenres(),
+    currentGenre: getGenres()[0],
   };
 
   handleClick = (movie) => {
@@ -32,10 +33,20 @@ class Movies extends Component {
     this.setState({ currentPage: page });
   };
 
+  handleGenreChange = (genre) => {
+    this.setState({ currentGenre: genre });
+  };
+
   renderTable() {
     const { length: countMovies } = this.state.movies;
     const { length: countGenres } = this.state.genres;
-    const { pageSize, currentPage, movies: allMovies, genres } = this.state;
+    const {
+      pageSize,
+      currentPage,
+      movies: allMovies,
+      genres,
+      currentGenre,
+    } = this.state;
 
     if (countMovies === 0) return <p>There are no movies in the database</p>;
 
@@ -43,7 +54,12 @@ class Movies extends Component {
 
     return (
       <React.Fragment>
-        <ListGroup countGenres={countGenres} genres={genres} />
+        <ListGroup
+          countGenres={countGenres}
+          genres={genres}
+          currentGenre={currentGenre}
+          onGenreChange={this.handleGenreChange}
+        />
         <p>Showing {countMovies} movies in the database.</p>
         <table className="table">
           <thead>
