@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import Like from "./common/like";
 import Pagination from "./common/pagination";
+import ListGroup from "./common/ListGroup";
 import { getMovies } from "../services/fakeMovieService";
+import { getGenres } from "../services/fakeGenreService";
 import { paginate } from "../utils/paginate";
 
 class Movies extends Component {
   state = {
     movies: getMovies(),
+    genres: getGenres(),
     pageSize: 4,
     currentPage: 1,
   };
@@ -30,16 +33,18 @@ class Movies extends Component {
   };
 
   renderTable() {
-    const { length: count } = this.state.movies;
-    const { pageSize, currentPage, movies: allMovies } = this.state;
+    const { length: countMovies } = this.state.movies;
+    const { length: countGenres } = this.state.genres;
+    const { pageSize, currentPage, movies: allMovies, genres } = this.state;
 
-    if (count === 0) return <p>There are no movies in the database</p>;
+    if (countMovies === 0) return <p>There are no movies in the database</p>;
 
     const movies = paginate(allMovies, currentPage, pageSize);
 
     return (
       <React.Fragment>
-        <p>Showing {count} movies in the database.</p>
+        <ListGroup countGenres={countGenres} genres={genres} />
+        <p>Showing {countMovies} movies in the database.</p>
         <table className="table">
           <thead>
             <tr>
@@ -77,7 +82,7 @@ class Movies extends Component {
           </tbody>
         </table>
         <Pagination
-          itemsCount={"kka"} //itemsCount={count}
+          itemsCount={countMovies}
           pageSize={pageSize}
           currentPage={currentPage}
           onPageChange={this.handlePageChange}
