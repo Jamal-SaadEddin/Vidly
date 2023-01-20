@@ -5,12 +5,10 @@ import ListGroup from "./common/ListGroup";
 import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
 import { paginate } from "../utils/paginate";
-import { genre } from "../utils/genre";
 
 class Movies extends Component {
   state = {
     movies: getMovies(),
-    moviesGenre: getMovies(),
     pageSize: 4,
     currentPage: 1,
     genres: getGenres(),
@@ -18,11 +16,11 @@ class Movies extends Component {
   };
 
   handleClick = (movie) => {
-    const moviesGenre = [...this.state.moviesGenre];
-    const index = this.state.moviesGenre.indexOf(movie);
-    moviesGenre[index] = { ...movie };
-    moviesGenre[index].liked = !moviesGenre[index].liked;
-    this.setState({ moviesGenre });
+    const movies = [...this.state.movies];
+    const index = this.state.movies.indexOf(movie);
+    movies[index] = { ...movie };
+    movies[index].liked = !movies[index].liked;
+    this.setState({ movies });
   };
 
   handleDelete = (movie) => {
@@ -35,19 +33,17 @@ class Movies extends Component {
     this.setState({ currentPage: page });
   };
 
-  handleGenreChange = (currentGenre) => {
-    const { movies } = this.state;
-    const moviesGenre = genre(movies, currentGenre);
-    this.setState({ currentGenre, moviesGenre });
+  handleGenreChange = (genre) => {
+    this.setState({ currentGenre: genre });
   };
 
   renderTable() {
-    const { length: countMovies } = this.state.moviesGenre;
+    const { length: countMovies } = this.state.movies;
     const { length: countGenres } = this.state.genres;
     const {
       pageSize,
       currentPage,
-      moviesGenre: allMovies,
+      movies: allMovies,
       genres,
       currentGenre,
     } = this.state;
