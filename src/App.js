@@ -67,9 +67,13 @@ class App extends Component {
         <main className="container">
           <Switch>
             <Route
-              path="/movies/:id"
+              path="/movies/:_id"
               render={(props) => (
-                <MovieForm onAddNewMovie={this.handleAddNewMovie} {...props} />
+                <MovieForm
+                  movies={this.state.movies}
+                  onAddNewMovie={this.handleAddNewMovie}
+                  {...props}
+                />
               )}
             ></Route>
             <Route path="/register" component={RegisterForm}></Route>

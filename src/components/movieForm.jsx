@@ -40,14 +40,25 @@ class MovieForm extends Form {
   };
 
   render() {
+    const { match } = this.props;
+    const _id = match.params._id;
+    const movies = this.props.movies;
+    let movie = movies.filter((m) => m._id === _id);
+    movie = { ...movie };
+    console.log(movie);
+
     return (
       <div>
         <h1>Movie Form</h1>
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("title", "Title")}
-          {this.renderDropDown("genre", "Genre", genres)}
-          {this.renderInput("numberInStock", "Number in Stock")}
-          {this.renderInput("dailyRentalRate", "Rate")}
+          {this.renderInput("title", "Title", movie.title)}
+          {this.renderDropDown("genre", "Genre", genres, movie.genre.name)}
+          {this.renderInput(
+            "numberInStock",
+            "Number in Stock",
+            movie.numberInStock
+          )}
+          {this.renderInput("dailyRentalRate", "Rate", movie.dailyRentalRate)}
           {this.renderButton("Save")}
         </form>
       </div>
