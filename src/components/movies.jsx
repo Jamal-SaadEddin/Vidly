@@ -2,53 +2,11 @@ import React, { Component } from "react";
 import ListGroup from "./common/listGroup";
 import MoviesTable from "./moviesTable";
 import Pagination from "./common/pagination";
-import { getMovies } from "../services/fakeMovieService";
 import { paginate } from "../utils/paginate";
-import { getGenres } from "../services/fakeGenreService";
-import _ from "lodash";
 import { Link } from "react-router-dom";
+import _ from "lodash";
 
 class Movies extends Component {
-  state = {
-    movies: [],
-    genres: [],
-    pageSize: 4,
-    currentPage: 1,
-    sortColumn: { path: "title", order: "asc" },
-  };
-
-  componentDidMount() {
-    const genres = [{ _id: "", name: "All Genres" }, ...getGenres()];
-
-    this.setState({ movies: getMovies(), genres });
-  }
-
-  handleClick = (movie) => {
-    const movies = [...this.state.movies];
-    const index = this.state.movies.indexOf(movie);
-    movies[index] = { ...movie };
-    movies[index].liked = !movies[index].liked;
-    this.setState({ movies });
-  };
-
-  handleDelete = (movie) => {
-    this.setState(
-      this.state.movies.splice(this.state.movies.indexOf(movie), 1)
-    );
-  };
-
-  handlePageChange = (page) => {
-    this.setState({ currentPage: page });
-  };
-
-  handleGenreSelect = (genre) => {
-    this.setState({ selectedGenre: genre, currentPage: 1 });
-  };
-
-  handleSort = (sortColumn) => {
-    this.setState({ sortColumn });
-  };
-
   getPagedData = () => {
     const {
       pageSize,
@@ -56,7 +14,7 @@ class Movies extends Component {
       sortColumn,
       selectedGenre,
       movies: allMovies,
-    } = this.state;
+    } = this.props.state;
 
     const filtered =
       selectedGenre && selectedGenre._id
@@ -71,8 +29,8 @@ class Movies extends Component {
   };
 
   render() {
-    const { length: count } = this.state.movies;
-    const { pageSize, currentPage, sortColumn } = this.state;
+    const { length: count } = this.props.state.movies;
+    const { pageSize, currentPage, sortColumn } = this.props.state;
 
     if (count === 0) return <p>There are no movies in the database</p>;
 
@@ -82,9 +40,9 @@ class Movies extends Component {
       <div className="row">
         <div className="col-3">
           <ListGroup
-            items={this.state.genres}
-            selectedItem={this.state.selectedGenre}
-            onItemSelect={this.handleGenreSelect}
+            items={this.props.state.genres}
+            selectedItem={this.props.state.selectedGenre}
+            onItemSelect={this.props.onGenreSelect}
           />
         </div>
         <div className="col">
@@ -97,15 +55,15 @@ class Movies extends Component {
           <MoviesTable
             movies={movies}
             sortColumn={sortColumn}
-            onDelete={this.handleDelete}
-            onLike={this.handleClick}
-            onSort={this.handleSort}
+            onDelete={this.props.onDelete}
+            onLike={this.props.onClick}
+            onSort={this.props.onSort}
           />
           <Pagination
             itemsCount={totalCount}
             pageSize={pageSize}
             currentPage={currentPage}
-            onPageChange={this.handlePageChange}
+            onPageChange={this.props.onPageChange}
           />
         </div>
       </div>
