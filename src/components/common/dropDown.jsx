@@ -13,7 +13,7 @@ const DropDown = ({ name, label, options, error, ...rest }) => {
       >
         <option defaultValue={v++}></option>
         {options.map((option) => (
-          <option key={option._id} value={option.name}>
+          <option key={option._id} value={v++}>
             {option.name}
           </option>
         ))}
