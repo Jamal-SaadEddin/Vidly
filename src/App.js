@@ -45,7 +45,15 @@ class App extends Component {
     const movies = [...this.state.movies];
     movies.push(movie);
     this.setState({ movies });
-    console.log("Added New Movie");
+  };
+
+  handleEditMovie = (movie) => {
+    const movies = [...this.state.movies];
+    const mov = movies.filter((m) => m._id === movie._id);
+    const index = movies.indexOf(mov[0]);
+    for (const key in movies[index]) {
+      movies[index][key] = movie[key];
+    }
   };
 
   handlePageChange = (page) => {
@@ -72,6 +80,7 @@ class App extends Component {
                 <MovieForm
                   movies={this.state.movies}
                   onAddNewMovie={this.handleAddNewMovie}
+                  onEditMovie={this.handleEditMovie}
                   {...props}
                 />
               )}
