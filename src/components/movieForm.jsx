@@ -7,10 +7,7 @@ class MovieForm extends Form {
   state = {
     data: { title: "", genre: "", numberInStock: "", dailyRentalRate: "" },
     errors: {},
-    firstRender: true,
   };
-
-  v = 1;
 
   schema = {
     title: Joi.string().required().label("Title"),
@@ -26,70 +23,42 @@ class MovieForm extends Form {
   doSubmit = () => {
     // Call the server
     const { data } = this.state;
-    const { history, onAddNewMovie, onEditMovie } = this.props;
-    const _id = this.getMovieId();
-
     const movie = {
-      _id,
       title: data.title,
-      genre: { _id: getGenre(data.genre)[0]._id, name: data.genre },
+      genre: { _id: getGenre(data.genre)._id, name: data.genre },
       numberInStock: data.numberInStock,
       dailyRentalRate: data.dailyRentalRate,
     };
 
-    if (_id === "new") {
-      movie._id = `${this.v++}`;
-      onAddNewMovie(movie);
-    } else onEditMovie(movie);
+    this.props.onAddNewMovie(movie);
+
+    const { history } = this.props;
 
     history.push("/movies");
 
     console.log("Submitted");
   };
 
-  getMovieId() {
+  render() {
     const { match } = this.props;
     const _id = match.params._id;
-    return _id;
-  }
+    const movies = this.props.movies;
+    let movie = movies.filter((m) => m._id === _id);
+    movie = { ...movie };
+    console.log(movie);
 
-  render() {
-    const _id = this.getMovieId();
-    if (_id === "new") return this.renderMovieForm();
-
-    if (this.state.firstRender) {
-      const movies = this.props.movies;
-      let movie = movies.filter((m) => m._id === _id);
-      movie = [...movie];
-      this.state.firstRender = false;
-      return this.renderMovieForm(movie[0]);
-    }
-
-    return this.renderMovieForm();
-  }
-
-  renderMovieForm(movie) {
     return (
       <div>
         <h1>Movie Form</h1>
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("title", "Title", movie ? movie.title : null)}
-          {this.renderDropDown(
-            "genre",
-            "Genre",
-            genres,
-            movie ? movie.genre.name : null
-          )}
+          {this.renderInput("title", "Title", movie.title)}
+          {this.renderDropDown("genre", "Genre", genres, movie.genre.name)}
           {this.renderInput(
             "numberInStock",
             "Number in Stock",
-            movie ? movie.numberInStock : null
+            movie.numberInStock
           )}
-          {this.renderInput(
-            "dailyRentalRate",
-            "Rate",
-            movie ? movie.dailyRentalRate : null
-          )}
+          {this.renderInput("dailyRentalRate", "Rate", movie.dailyRentalRate)}
           {this.renderButton("Save")}
         </form>
       </div>

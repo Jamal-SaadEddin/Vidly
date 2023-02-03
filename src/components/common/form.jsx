@@ -55,31 +55,22 @@ class Form extends Component {
     );
   }
 
-  renderInput(name, label, value, type = "text") {
-    const { errors } = this.state;
+  renderInput(name, label, type = "text") {
+    const { data, errors } = this.state;
 
     return (
       <Input
         type={type}
         name={name}
         label={label}
-        value={this.getValue(value, name)}
+        value={data[name]}
         onChange={this.handleChange}
         error={errors[name]}
       />
     );
   }
 
-  getValue = (value, name) => {
-    const { data } = this.state;
-    if (value) {
-      data[name] = value;
-      return value;
-    }
-    return data[name];
-  };
-
-  renderDropDown(name, label, options, value) {
+  renderDropDown(name, label, options) {
     const { data, errors } = this.state;
 
     return (
@@ -87,7 +78,7 @@ class Form extends Component {
         name={name}
         label={label}
         options={options}
-        value={this.getValue(value, name)}
+        value={data[name]}
         onChange={this.handleChange}
         error={errors[name]}
       />
