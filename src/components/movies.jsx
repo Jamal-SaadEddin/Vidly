@@ -49,19 +49,6 @@ class Movies extends Component {
     this.setState({ sortColumn });
   };
 
-  handleSearch = (e) => {
-    const movies = getMovies();
-    const searchElement = e.currentTarget.value;
-    const searchedMovies = movies.filter((movie) =>
-      movie.title.toLowerCase().includes(searchElement.toLowerCase())
-    );
-    const selectedGenre = [...this.state.genres].filter(
-      (genre) => genre.name === "All Genres"
-    );
-    this.setState({ movies: searchedMovies, selectedGenre });
-    console.log("handeled search.");
-  };
-
   getPagedData = () => {
     const {
       pageSize,
@@ -109,13 +96,6 @@ class Movies extends Component {
             New Movie
           </Link>
           <p>Showing {totalCount} movies in the database.</p>
-          <input
-            name="search"
-            id="search"
-            placeholder="Search..."
-            className="form-control"
-            onChange={this.handleSearch}
-          />
           <MoviesTable
             movies={movies}
             sortColumn={sortColumn}
