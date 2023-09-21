@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Movies from "./components/movies";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Customers from "./components/customers";
